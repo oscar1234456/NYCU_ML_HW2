@@ -2,6 +2,8 @@ import numpy as np
 
 from config.constant import FILE_PATH
 from dataprocess.dataset import DataSet
+from process.get_posterior import get_posterior_discrete
+from process.get_prior import get_prior
 from process.get_proba_matrix import get_prob_matrix_discrete, get_prob_matrix_continuous
 
 toggle_option = input("Enter toggle option(0: discrete/1:continuous):")
@@ -15,11 +17,13 @@ test_x, test_y = dataset.get_testing_data()
 if toggle_option == "0":
     # discrete
     # TODO: Get probability matrix
-    prob_matrix_discrete = get_prob_matrix_discrete(train_x, train_y)
+    prob_matrix_discrete = get_prob_matrix_discrete(train_x, train_y, (28,28), 10, 32)
     # TODO: Get prior
+    prior = get_prior(train_y, 10)
     # TODO: Get and print posterior
+    prob = get_posterior_discrete(test_x, test_y, prior, prob_matrix_discrete, 32)
     # TODO: print the pic based on likelihood
-    pass
+    print()
 else:
     # continuous
     # TODO: Get probability matrix

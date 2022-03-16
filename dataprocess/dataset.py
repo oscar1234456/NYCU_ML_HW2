@@ -10,6 +10,7 @@ class DataSet:
             print("==Training Pic Data Loading==")
             self.train_pic_data = f.read()
             self.train_pic_amount = self._hex_to_int(self.train_pic_data[4:8])
+            # self.train_pic_amount = 2
             self.train_rows_length = self._hex_to_int(self.train_pic_data[8:12])
             self.train_cols_length = self._hex_to_int(self.train_pic_data[12:16])
             print(f"->pic amount: {self.train_pic_amount}")
