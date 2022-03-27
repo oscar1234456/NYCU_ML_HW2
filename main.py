@@ -17,27 +17,27 @@ test_x, test_y = dataset.get_testing_data()
 
 if toggle_option == "0":
     # discrete
-    # TODO: Get probability matrix
+    # Get probability matrix
     prob_matrix_discrete = get_prob_matrix_discrete(train_x, train_y, (28,28), 10, 32)
-    # TODO: Get prior
+    # Get prior
     prior = get_prior(train_y, 10)
-    # TODO: Get and print posterior
+    # Get and print posterior
     prob = get_posterior_discrete(test_x, test_y, prior, prob_matrix_discrete, 32)
-    # TODO: print the pic based on likelihood
+    # print the pic based on likelihood
     print("Imagination of numbers in Bayesian classifier:")
     get_imagination_discrete(prob_matrix_discrete, class_num=10, pic_size=(28, 28))
     print()
 else:
     # continuous
-    # TODO: Get probability matrix
+    # Get probability matrix
     prob_matrix_continuous = get_prob_matrix_continuous(train_x, train_y, (28,28), 10, 256)
+    # Get prior
     prior = get_prior(train_y, 10)
+    # Get and print posterior
     prob = get_posterior_continuous(test_x, test_y, prior, prob_matrix_continuous)
+    # print the pic based on likelihood
     print("Imagination of numbers in Bayesian classifier:")
     get_imagination_continuous(prob_matrix_continuous, class_num=10, pic_size=(28, 28))
     print()
-    # TODO: Get prior
-    # TODO: Get and print posterior
-    # TODO: print the pic based on likelihood
 
 

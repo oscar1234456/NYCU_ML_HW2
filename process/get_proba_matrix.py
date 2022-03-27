@@ -4,15 +4,18 @@ from tqdm import trange
 from distribution.gaussian import get_mean, get_variance, get_gaussian_likelihood
 
 
+# likelihood
+# [  [  [  []*bins_number  ]*all_pix_num  ]*class_number(0~9)  ]
 def get_prob_matrix_discrete(train_x, train_y, pic_size: (int, int), class_number: int, bins_number: int):
     train_amount = train_x.shape[0]
     all_pix_num = pic_size[0] * pic_size[1]
     prob_matrix = np.zeros((class_number, all_pix_num, bins_number))
     base_bin = (256 // bins_number)
     epoch = trange(0, train_amount, dynamic_ncols=True)
+
     for pic_index in epoch:
         epoch.set_description(f"getting prob matrix discrete {pic_index} (count bins)")
-        now_pic_label = train_y[pic_index]
+        now_pic_label = train_y[pic_index]  # get the class of this training pic
         for pixel_index in range(all_pix_num):
             pixel_value = train_x[pic_index, pixel_index]
             to_bin = int(pixel_value) // base_bin
@@ -26,20 +29,31 @@ def get_prob_matrix_discrete(train_x, train_y, pic_size: (int, int), class_numbe
             for now_focus_bin in range(bins_number):
                 count += prob_matrix[now_focus_class, pixel_index, now_focus_bin]
             if count == 0:
+                # check empty bin
                 print(f"have 0: [{now_focus_class},{pixel_index},{now_focus_bin}]")
+            # normalization
             prob_matrix[now_focus_class, pixel_index, :] = prob_matrix[now_focus_class, pixel_index, :] / count
+            # we can know the prob of bin of this pixel in this class
 
     return prob_matrix
 
 
+# likelihood
+# [  [  [  []*pix_level  ]*all_pix_num  ]*class_number(0~9)  ]
 def get_prob_matrix_continuous(train_x, train_y, pic_size: (int, int), class_num: int, pix_level=256):
     train_amount = train_x.shape[0]
     all_pix_num = pic_size[0] * pic_size[1]
     prob_matrix = np.zeros((class_num, all_pix_num, pix_level))
     epoch = trange(0, class_num, dynamic_ncols=True)
+
+    # likelihood |
+    #            |
+    #            |
+    #            |_______________ pix_level
+
     for now_focus_class in epoch:
         epoch.set_description(f"getting prob matrix conti {now_focus_class} class")
-        all_data_on_class = train_x[train_y == now_focus_class]   # (#data on focus class, 28*28)
+        all_data_on_class = train_x[train_y == now_focus_class]  # [ [ []*784 ]*#data on focus class ]
         for pix_index in range(all_pix_num):
             all_value_on_focus_pixel = all_data_on_class[:, pix_index]  # (#data on focus class)
             mean_on_focus_pixel = get_mean(all_value_on_focus_pixel)

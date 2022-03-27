@@ -1,6 +1,6 @@
 import numpy as np
 
-
+# [[]*class_num]
 def get_prior(train_y, class_num: int):
     prior = np.zeros(class_num)
     train_amount = train_y.shape[0]
